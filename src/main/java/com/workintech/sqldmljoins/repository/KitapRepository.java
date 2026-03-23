@@ -9,14 +9,13 @@ import java.util.List;
 public interface KitapRepository extends JpaRepository<Kitap, Long> {
 
     // Dram ve Hikaye türündeki kitapları listeleyin. JOIN kullanmadan yapın.
-    // Mantık: Kitap tablosundaki turno sütununu, tur tablosundan gelen sonuçla filtreliyoruz.
     String QUESTION_1 = "SELECT * FROM kitap WHERE turno IN (SELECT turno FROM tur WHERE ad IN ('Dram', 'Hikaye'))";
     @Query(value = QUESTION_1, nativeQuery = true)
     List<Kitap> findBooks();
 
     // Tüm kitapların ortalama puanını bulunuz.
-    // Mantık: AVG fonksiyonu ile puan sütununun ortalamasını alıyoruz.
-    String QUESTION_10 = "SELECT AVG(puan) FROM kitap";
+    // numeric cast ve round ile java'nın beklediği formata zorluyoruz.
+    String QUESTION_10 = "SELECT ROUND(AVG(puan)::numeric, 2) FROM kitap";
     @Query(value = QUESTION_10, nativeQuery = true)
     Double findAvgPointOfBooks();
 

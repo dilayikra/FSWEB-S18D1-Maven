@@ -9,13 +9,11 @@ import java.util.List;
 public interface OgrenciRepository extends JpaRepository<Ogrenci, Long> {
 
     // Kitap alan öğrencilerin öğrenci bilgilerini listeleyin..
-    // Mantık: islem tablosunda kaydı olan öğrencileri getir.
-    String QUESTION_2 = "SELECT DISTINCT o.* FROM ogrenci o JOIN islem i ON o.ogrno = i.ogrno";
+    String QUESTION_2 = "SELECT o.* FROM ogrenci o JOIN islem i ON o.ogrno = i.ogrno";
     @Query(value = QUESTION_2, nativeQuery = true)
     List<Ogrenci> findStudentsWithBook();
 
     // Kitap almayan öğrencileri listeleyin.
-    // Mantık: ogrenci tablosunda olup islem tablosunda karşılığı olmayanlar.
     String QUESTION_3 = "SELECT o.* FROM ogrenci o LEFT JOIN islem i ON o.ogrno = i.ogrno WHERE i.islemno IS NULL";
     @Query(value = QUESTION_3, nativeQuery = true)
     List<Ogrenci> findStudentsWithNoBook();
@@ -35,8 +33,7 @@ public interface OgrenciRepository extends JpaRepository<Ogrenci, Long> {
     @Query(value = QUESTION_6, nativeQuery = true)
     Integer findUniqueStudentNameCount();
 
-    // --İsme göre öğrenci sayılarının adedini bulunuz.
-    // --Ali: 2, Mehmet: 3
+    // İsme göre öğrenci sayılarının adedini bulunuz.
     String QUESTION_7 = "SELECT ad, COUNT(*) FROM ogrenci GROUP BY ad";
     @Query(value = QUESTION_7, nativeQuery = true)
     List<StudentNameCount> findStudentNameCount();
@@ -46,8 +43,8 @@ public interface OgrenciRepository extends JpaRepository<Ogrenci, Long> {
     @Query(value = QUESTION_8, nativeQuery = true)
     List<StudentClassCount> findStudentClassCount();
 
-    // Her öğrencinin ad soyad karşılığında okuduğu kitap sayısı
-    String QUESTION_9 = "SELECT o.ad, o.soyad, COUNT(i.islemno) FROM ogrenci o LEFT JOIN islem i ON o.ogrno = i.ogrno GROUP BY o.ad, o.soyad";
+    // Her öğrencinin ad soyad karşılığında okuduğu kitap sayısını getiriniz.
+    String QUESTION_9 = "SELECT o.ad, o.soyad, COUNT(i.islemno) FROM ogrenci o LEFT JOIN islem i ON o.ogrno = i.ogrno GROUP BY o.ogrno, o.ad, o.soyad";
     @Query(value = QUESTION_9, nativeQuery = true)
     List<StudentNameSurnameCount> findStudentNameSurnameCount();
 }
